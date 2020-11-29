@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 mongoClient.connect(dbConfig.url, (err, database) => {
     if (err) return console.log(err);
 
-    DatabaseSingleton.setDb(database.db('notes'));
+    DatabaseSingleton.setClient(database, 'notes');
 
     app.use(noteRouter);
     app.listen(PORT, () => {
