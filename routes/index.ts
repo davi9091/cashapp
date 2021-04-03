@@ -6,7 +6,16 @@ import {InsertOneWriteOpResult, MongoClient, MongoError, ObjectID, WithId} from 
 export const noteRouter = Router();
 const dbErrorHandler = (error: MongoError, message: string) => ({error: {message: message, dbError: MongoError}});
 
-noteRouter.get('/check_db', (req, res) => {
+noteRouter.get('/notes', async (req, res) => {
+    const db = await DatabaseSingleton.getDbInstance();
+
+    try {
+        const cursor = db.collection('notes').find({});
+        const result = await cursor.toArray();
+        res.send(result);
+    } catch (error) {
+        res.send(dbErrorHandler(error, 'error while getting notes'));
+    }
 })
 
 noteRouter.post('/note', async (req, res) => {
@@ -18,7 +27,10 @@ noteRouter.post('/note', async (req, res) => {
         return;
     }
 
-    const note: INotesBody = req.body;
+    const note: INotesBody = {
+        ...req.body,
+        created: Date.now(),
+    };
 
     try {
         const result = await db.collection('notes').insertOne(note);

@@ -11,7 +11,11 @@ export class DatabaseSingleton {
 
     public static async getDbInstance(): Promise<Db> {
         if (!this._client.isConnected()) {
-            await this._client.connect();
+            try {
+                await this._client.connect();
+            } catch (err) {
+                throw err;
+            }
         }
 
         return this._db || new Error('DB connection is not established');
