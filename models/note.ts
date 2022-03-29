@@ -1,5 +1,4 @@
-import {Document, Model, model, MongooseDocument, Schema} from "mongoose";
-import {INotesBody} from "../routes/types";
+import {model, Schema} from "mongoose";
 
 export const noteSchema = new Schema({
     title: {
@@ -8,10 +7,6 @@ export const noteSchema = new Schema({
     },
     body: {
         type: String,
-        required: true,
-    },
-    _id: {
-        type: Schema.Types.ObjectId,
         required: true,
     },
     created: {

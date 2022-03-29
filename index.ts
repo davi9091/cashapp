@@ -1,26 +1,48 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-import {noteRouter} from "./routes";
-import {MongoClient} from "mongodb";
+import { noteRouter } from "./routes/notes";
+import mongoose from "mongoose";
+import { MongoClient } from "mongodb";
 import bodyParser from "body-parser";
-import {dbConfig} from "./config/db";
-import {DatabaseSingleton} from "./helpers/DatabaseSingleton";
-import {dbConfig} from "./config/db";
+import { DatabaseSingleton } from "./helpers/DatabaseSingleton";
+import { dbConfig } from "./config/db";
+import { userRouter } from "./routes/user";
+import passport from "passport";
+import session from "express-session";
 
 const mongoClient = MongoClient;
 const app = express();
 const PORT = 3200;
 
 app.use(cors());
-app.use(bodyParser.json())
-mongoClient.connect(dbConfig.url, (err, database) => {
-    if (err) return console.log(err);
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "very secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.authenticate("session"));
 
-    DatabaseSingleton.setClient(database, 'notes');
+mongoose
+  .connect(dbConfig.url, { useNewUrlParser: true })
+  .then((mongooseInstance) => {
+    DatabaseSingleton.setInstance(mongooseInstance);
 
+    passport.initialize();
     app.use(noteRouter);
+    app.use(userRouter);
     app.listen(PORT, () => {
-        console.log(`server is running at port ${PORT}`);
+      console.log(`server is running at port ${PORT}`);
     });
-})
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+// DatabaseSingleton.setClient(database, 'notes');
