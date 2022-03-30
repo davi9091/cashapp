@@ -18,7 +18,6 @@ userRouter.post("/user/register", async (req, res) => {
   const user = new User({
     ...req.body,
     username,
-    token: key,
   });
 
   try {
@@ -32,7 +31,6 @@ userRouter.post("/user/register", async (req, res) => {
 });
 
 userRouter.post("/user/login", passport.authenticate("local"), (req, res) => {
-  console.log(req.user);
   const user = req.user;
   if (!user)
     return res.status(HttpStatusCode.NOT_FOUND).send({ error: "no such user" });

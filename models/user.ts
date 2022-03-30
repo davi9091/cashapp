@@ -6,9 +6,9 @@ const SALT_WORK_FACTOR = 10;
 export interface IUserDoc extends Document<Schema.Types.ObjectId, {}> {
   username: string;
   password: string;
-  token: string;
   firstName: string;
   lastName: string;
+  defaultCurrency: string;
 
   comparePasswords: <T>(
     candidatePassword: string,
@@ -33,6 +33,11 @@ const userSchema: Schema<IUserDoc> = new Schema({
     type: String,
     required: true,
   },
+  defaultCurrency: {
+    type: String,
+    required: true,
+  },
+
   lastName: {
     type: String,
     required: false,
@@ -59,14 +64,11 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.comparePasswords = async function (candidatePassword, cb) {
   const { password } = this;
-  console.log("password", password);
 
   try {
     const match = await bcrypt.compare(candidatePassword, password);
-    console.log(match);
     cb(null, match);
   } catch (error) {
-    console.log(error);
     return cb(error);
   }
 };

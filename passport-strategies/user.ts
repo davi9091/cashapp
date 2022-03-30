@@ -9,7 +9,7 @@ export const initPassportUserStrategy = (passport: PassportStatic) => {
 
   passport.deserializeUser(async (id, cb) => {
     try {
-      const user = User.findById(id);
+      const user = await User.findById(id);
       cb(null, user);
     } catch (error) {
       cb(error);
@@ -19,7 +19,6 @@ export const initPassportUserStrategy = (passport: PassportStatic) => {
   passport.use(
     new LocalStrategy((username, password, cb) => {
       User.findOne({ username }, null, null, (error, user) => {
-        console.log(password, user);
         if (error) return cb(error);
         if (!user) return cb(null, false, { message: "incorrect username" });
 
