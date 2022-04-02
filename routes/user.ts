@@ -9,28 +9,31 @@ export const userRouter = Router();
 import { initPassportUserStrategy } from "../passport-strategies/user";
 initPassportUserStrategy(passport);
 
-userRouter.post("/user/register", async (req, res) => {
-  const username = req.body.username;
+userRouter.post("/user/register", passport.authenticate('local-signup'), (req, res) => {
+  const user = req.user;
+  if (!user)
+    return res.status(HttpStatusCode.NOT_FOUND).send({ error: "no such user" });
+    
+  //TODO: this is a questionable decision, rewrite later?
+  req.login(user, (error) => {
+    if (error) return res.status(HttpStatusCode.UNAUTHORIZED).send({error: 'wrong password'});
 
-  const { key, name, params } = generateCookie(username);
-  res.cookie(name, key, params);
-
-  const user = new User({
-    ...req.body,
-    username,
-  });
-
-  try {
-    const savedUser = await user.save();
-    res.send(savedUser.toJSON());
-  } catch (error) {
-    console.error(error);
-    res.status(HttpStatusCode.BAD_REQUEST);
-    res.send(error);
-  }
+    return res.status(HttpStatusCode.OK).send(user);
+  })
 });
 
-userRouter.post("/user/login", passport.authenticate("local"), (req, res) => {
+userRouter.post('/user/restore', async (req, res) => {
+  const isAuthenticated = req.isAuthenticated();
+  const user = req.user;
+
+  if (isAuthenticated && user) {
+    return res.status(HttpStatusCode.OK).send(user);
+  } else {
+    return res.status(HttpStatusCode.UNAUTHORIZED);
+  }
+})
+
+userRouter.post("/user/login", passport.authenticate("local-signin"), (req, res) => {
   const user = req.user;
   if (!user)
     return res.status(HttpStatusCode.NOT_FOUND).send({ error: "no such user" });

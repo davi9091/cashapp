@@ -1,5 +1,5 @@
 import { PassportStatic } from "passport";
-import { IUserDoc, User } from "../models/user";
+import { User } from "../models/user";
 import { Strategy as LocalStrategy } from "passport-local";
 
 export const initPassportUserStrategy = (passport: PassportStatic) => {
@@ -17,6 +17,7 @@ export const initPassportUserStrategy = (passport: PassportStatic) => {
   });
 
   passport.use(
+    "local-signin",
     new LocalStrategy((username, password, cb) => {
       User.findOne({ username }, null, null, (error, user) => {
         if (error) return cb(error);
@@ -30,5 +31,35 @@ export const initPassportUserStrategy = (passport: PassportStatic) => {
         });
       });
     })
+  );
+
+  passport.use(
+    "local-signup",
+    new LocalStrategy(
+      { passReqToCallback: true },
+      async (req, username, password, cb) => {
+        try {
+          const existingUser = await User.findOne({ username });
+          console.log('existingUser', existingUser);
+          if (existingUser) {
+            return cb(null, false, {
+              message: `user with username ${username} already exists`,
+            });
+          }
+
+          const newUser = new User({
+            ...req.body,
+          });
+
+          console.log('newUser', newUser);
+
+          const savedUser = await newUser.save();
+          return cb (null, savedUser);
+        } catch (error) {
+          console.log(error);
+          return cb(error);
+        }
+      }
+    )
   );
 };

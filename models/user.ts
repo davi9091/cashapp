@@ -1,4 +1,4 @@
-import { Document, Model, model, Schema, Types } from "mongoose";
+import { CallbackError, Document, Model, model, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 const SALT_WORK_FACTOR = 10;
@@ -8,7 +8,7 @@ export interface IUserDoc extends Document<Schema.Types.ObjectId, {}> {
   password: string;
   firstName: string;
   lastName: string;
-  defaultCurrency: string;
+  defaultCurrencyId: string;
 
   comparePasswords: <T>(
     candidatePassword: string,
@@ -25,19 +25,14 @@ const userSchema: Schema<IUserDoc> = new Schema({
     type: String,
     required: true,
   },
-  token: {
-    type: String,
-    required: true,
-  },
   firstName: {
     type: String,
     required: true,
   },
-  defaultCurrency: {
+  defaultCurrencyId: {
     type: String,
     required: true,
   },
-
   lastName: {
     type: String,
     required: false,
@@ -57,7 +52,7 @@ userSchema.pre("save", async function (next) {
 
     user.password = hash;
     next();
-  } catch (e) {
+  } catch (e: any) {
     next(e);
   }
 });
