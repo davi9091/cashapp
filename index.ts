@@ -1,3 +1,4 @@
+import { fundsRouter } from './routes/funds';
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -10,6 +11,7 @@ import { dbConfig } from "./config/db";
 import { userRouter } from "./routes/user";
 import passport from "passport";
 import session from "express-session";
+import { initPassportUserStrategy } from "./passport-strategies/user";
 
 const app = express();
 const PORT = 3200;
@@ -31,10 +33,12 @@ mongoose
   .connect(dbConfig.url, { useNewUrlParser: true })
   .then((mongooseInstance) => {
     DatabaseSingleton.setInstance(mongooseInstance);
+    initPassportUserStrategy(passport);
 
     passport.initialize();
     app.use(noteRouter);
     app.use(userRouter);
+    app.use(fundsRouter);
     app.listen(PORT, () => {
       console.log(`server is running at port ${PORT}`);
     });

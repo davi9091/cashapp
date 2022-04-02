@@ -1,4 +1,4 @@
-import { CallbackError, Document, Model, model, Schema, Types } from "mongoose";
+import { Document, Model, model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 const SALT_WORK_FACTOR = 10;
@@ -7,8 +7,8 @@ export interface IUserDoc extends Document<Schema.Types.ObjectId, {}> {
   username: string;
   password: string;
   firstName: string;
-  lastName: string;
   defaultCurrencyId: string;
+  lastName?: string;
 
   comparePasswords: <T>(
     candidatePassword: string,
@@ -16,7 +16,7 @@ export interface IUserDoc extends Document<Schema.Types.ObjectId, {}> {
   ) => T;
 }
 
-const userSchema: Schema<IUserDoc> = new Schema({
+export const userSchema: Schema<IUserDoc> = new Schema({
   username: {
     type: String,
     required: true,

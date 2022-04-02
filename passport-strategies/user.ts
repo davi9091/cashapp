@@ -40,7 +40,6 @@ export const initPassportUserStrategy = (passport: PassportStatic) => {
       async (req, username, password, cb) => {
         try {
           const existingUser = await User.findOne({ username });
-          console.log('existingUser', existingUser);
           if (existingUser) {
             return cb(null, false, {
               message: `user with username ${username} already exists`,
@@ -51,12 +50,11 @@ export const initPassportUserStrategy = (passport: PassportStatic) => {
             ...req.body,
           });
 
-          console.log('newUser', newUser);
 
           const savedUser = await newUser.save();
           return cb (null, savedUser);
         } catch (error) {
-          console.log(error);
+          console.error(error);
           return cb(error);
         }
       }
