@@ -1,3 +1,4 @@
+import { NewFundBody } from './types';
 import { IUserDoc } from './../models/user';
 import { Fund } from "./../models/fund";
 import HttpStatusCode from "http-status-codes";
@@ -19,8 +20,6 @@ fundsRouter.get("/funds", async (req, res) => {
       res.status(HttpStatusCode.NOT_FOUND);
     }
 
-    console.log(funds);
-
     res.status(HttpStatusCode.OK).send(funds);
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error);
@@ -35,10 +34,12 @@ fundsRouter.put("/funds/new", async (req, res) => {
     return res.status(HttpStatusCode.UNAUTHORIZED);
   }
 
+  const fundBody: NewFundBody = req.body
+
   try {
     const newFund = new Fund({
       owner: user,
-      ...req.body,
+      ...fundBody,
     })
 
     const savedFund = await newFund.save();

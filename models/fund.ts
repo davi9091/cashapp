@@ -1,14 +1,14 @@
 import { Schema, Document, Model, model } from "mongoose";
-import { User, userSchema } from "./user";
+import { IUserDoc, userSchema } from "./user";
 
 export interface IFundDoc extends Document<Schema.Types.ObjectId, {}> {
-  owner: typeof User;
+  owner: IUserDoc;
   currencyId: string;
   amount: number;
   name?: string;
 }
 
-const fundSchema: Schema<IFundDoc> = new Schema({
+export const fundSchema: Schema<IFundDoc> = new Schema({
   owner: userSchema,
   currencyId: {
     type: String,

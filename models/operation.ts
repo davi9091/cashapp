@@ -1,20 +1,25 @@
+import { fundSchema, IFundDoc } from './fund';
 import { Schema, Document, Model, model } from "mongoose";
-import { User, userSchema } from "./user";
 
 export interface IOperationDoc extends Document<Schema.Types.ObjectId, {}> {
-  owner: typeof User;
+  fund: IFundDoc;
   amount: number;
   groupName: string;
+  creationDate: number;
   label: string;
 }
 
-const fundSchema: Schema<IOperationDoc> = new Schema({
-  owner: userSchema,
+const operationSchema: Schema<IOperationDoc> = new Schema({
+  fund: fundSchema,
   groupName: {
     type: String,
     required: true,
   },
   amount: {
+    type: Number,
+    required: true,
+  },
+  creationDate: {
     type: Number,
     required: true,
   },
@@ -24,4 +29,4 @@ const fundSchema: Schema<IOperationDoc> = new Schema({
   },
 });
 
-export const Operation: Model<IOperationDoc> = model("Operation", fundSchema);
+export const Operation: Model<IOperationDoc> = model("Operation", operationSchema);

@@ -1,4 +1,5 @@
-import { fundsRouter } from './routes/funds';
+import { opsRouter } from "./routes/operations";
+import { fundsRouter } from "./routes/funds";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -39,6 +40,7 @@ mongoose
     app.use(noteRouter);
     app.use(userRouter);
     app.use(fundsRouter);
+    app.use(opsRouter);
     app.listen(PORT, () => {
       console.log(`server is running at port ${PORT}`);
     });
