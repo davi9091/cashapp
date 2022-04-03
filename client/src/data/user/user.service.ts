@@ -4,9 +4,9 @@ import { AuthError, User, UserLoginData, UserRegisterData, UserResponse } from '
 import { getAllCurrencies, getDefaultCurrency } from './utils/currencies'
 
 const USER_ENDPOINTS = {
-  login: 'http://127.0.0.1:3200/user/login',
-  register: 'http://127.0.0.1:3200/user/register',
-  restore: 'http://127.0.0.1:3200/user/restore',
+  login: 'user/login',
+  register: '/user/register',
+  restore: 'user/restore',
 }
 
 const USER_STORAGE = {
@@ -63,7 +63,7 @@ export class UserService implements IUserService {
   }
 
   async sendRestoreReq() {
-    const restoreResponse = await fetch(USER_ENDPOINTS.restore, getHeaders())
+    const restoreResponse = await fetch(window.location.href + USER_ENDPOINTS.restore, getHeaders())
 
     if (restoreResponse.status === 401) {
       this.user$.next(null)
@@ -91,7 +91,7 @@ export class UserService implements IUserService {
   async register(registerData: UserRegisterData): Promise<AuthError | null> {
     try {
       const userResponse = await fetch(
-        USER_ENDPOINTS.register,
+        window.location.href + USER_ENDPOINTS.register,
         getHeaders(registerData),
       )
 

@@ -7,8 +7,8 @@ import { getAllCurrencies } from '../user/utils/currencies'
 import { getHeaders } from '../utils'
 
 const OPS_ENDPOINTS = {
-  getOperations: 'http://127.0.0.1:3200/operations',
-  newOperations: 'http://127.0.0.1:3200/operations',
+  getOperations: 'operations',
+  newOperations: 'operations',
 }
 
 export class OperationsService {
@@ -62,7 +62,7 @@ function opsResponseToModel(resp: OpsResponse): Operation {
 async function addOperation(operation: AddOperation) {
   try {
     const opsResponse = await fetch(
-      OPS_ENDPOINTS.newOperations,
+      window.location.href + OPS_ENDPOINTS.newOperations,
       getHeaders(operation, 'PUT'),
     )
 
@@ -78,7 +78,7 @@ async function addOperation(operation: AddOperation) {
 async function fetchOperations(fundId: string) {
   try {
     const opsResponse = await fetch(
-      `${OPS_ENDPOINTS.getOperations}/${fundId}`,
+      `${window.location.href}${OPS_ENDPOINTS.getOperations}/${fundId}`,
       getHeaders(undefined, 'GET'),
     )
 

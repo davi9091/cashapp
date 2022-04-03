@@ -6,8 +6,8 @@ import { IUserService } from '../user/user.service'
 import { AddFund, Fund, FundResponse } from './types'
 
 const FETCH_ENDPOINTS = {
-  getFunds: 'http://127.0.0.1:3200/funds',
-  newFund: 'http://127.0.0.1:3200/funds/new',
+  getFunds: 'funds',
+  newFund: 'funds/new',
 }
 export interface IFundsService {
   funds$: BehaviorSubject<Record<IDType, Fund>>
@@ -84,7 +84,7 @@ export class FundsService {
   async #addFund(newFund: AddFund) {
     try {
       const fundsResponse = await fetch(
-        FETCH_ENDPOINTS.newFund,
+        window.location.href + FETCH_ENDPOINTS.newFund,
         getHeaders({ ...newFund, currencyId: newFund.currency.id }, 'PUT'),
       )
 
@@ -100,7 +100,7 @@ export class FundsService {
   async #fetchFunds() {
     try {
       const fundsResponse = await fetch(
-        FETCH_ENDPOINTS.getFunds,
+        window.location.href + FETCH_ENDPOINTS.getFunds,
         getHeaders(undefined, 'GET'),
       )
 
