@@ -16,7 +16,7 @@ import path from "path";
 import dotenv from "dotenv";
 
 const app = express();
-const PORT = 3200;
+const PORT = process.env.PORT || 3200;
 const appRoot = path.join(__dirname, "client", "build");
 
 if (!process.env.DB_URL) {
