@@ -4,7 +4,6 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { noteRouter } from "./routes/notes";
 import mongoose from "mongoose";
 import { json } from "body-parser";
 import { DatabaseSingleton } from "./helpers/DatabaseSingleton";
@@ -50,7 +49,6 @@ mongoose
     initPassportUserStrategy(passport);
 
     passport.initialize();
-    app.use(noteRouter);
     app.use(userRouter);
     app.use(fundsRouter);
     app.use(opsRouter);
