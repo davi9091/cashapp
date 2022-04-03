@@ -11,11 +11,18 @@ import { OperationsService } from './data/operations/operations.service'
 const startApp = async () => {
   const userService = new UserService()
   const fundsService = new FundsService(userService)
-  const operationsService = new OperationsService(fundsService.selectedFund$, fundsService.updateCallback)
+  const operationsService = new OperationsService(
+    fundsService.selectedFund$,
+    fundsService.updateCallback,
+  )
 
   ReactDOM.render(
     <React.StrictMode>
-      <App userService={userService} fundsService={fundsService} operationsService={operationsService} />
+      <App
+        userService={userService}
+        fundsService={fundsService}
+        operationsService={operationsService}
+      />
     </React.StrictMode>,
     document.getElementById('root'),
   )
