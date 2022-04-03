@@ -1,0 +1,21 @@
+
+.activeFund {
+  cursor: pointer !important;
+}
+
+.list  {
+  display: flex;
+  flex-direction: column;
+}
+
+.list > * {
+  margin-bottom: 10px;
+}
+
+.separatorContainer {
+  padding: 0 5px 0 50%;
+}
+
+.verticalSeparator {
+  border-bottom: 1px solid black;
+}

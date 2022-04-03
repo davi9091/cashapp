@@ -1,0 +1,11 @@
+
+
+.form {
+  display: flex;
+}
+
+
+.form > * {
+  margin-right: 5px !important;
+}
+

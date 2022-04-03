@@ -17,7 +17,7 @@ import dotenv from "dotenv";
 
 const app = express();
 const PORT = 3200;
-const appRoot = path.join(__dirname, "frontend_dist");
+const appRoot = path.join(__dirname, "client", "build");
 
 if (!process.env.DB_URL) {
   dotenv.config();
@@ -56,7 +56,7 @@ mongoose
     app.use(opsRouter);
 
     app.use("/", (req, res) => {
-      res.sendFile(path.join(__dirname, "frontend_dist", "index.html"));
+      res.sendFile(path.join(__dirname, "client", "build", "index.html"));
     });
 
     app.listen(PORT, () => {

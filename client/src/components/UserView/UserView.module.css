@@ -1,0 +1,12 @@
+
+.userContainer {
+  display: flex;
+  line-height: 32px;
+  height: 32px;
+  padding: 5px;
+  margin-left: -5px;
+}
+
+.userContainer > * {
+  margin-left: 5px;
+}

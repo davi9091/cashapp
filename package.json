@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon ./index.ts",
-    "build": "tsc --project ./"
+    "build": "tsc --project ./",
+    "heroku-prebuild": "cd client && yarn install && yarn build"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.1",
