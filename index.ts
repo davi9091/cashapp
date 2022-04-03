@@ -17,7 +17,7 @@ import path from "path";
 
 const app = express();
 const PORT = 3200;
-const appRoot = path.join(__dirname, 'build')
+const appRoot = path.join(__dirname, "frontend_dist");
 
 app.use(cors());
 app.use(express.static(appRoot));
@@ -45,9 +45,9 @@ mongoose
     app.use(fundsRouter);
     app.use(opsRouter);
 
-    app.use('/', (req, res) => {
-      res.sendFile(path.join(__dirname, 'build', 'index.html'))
-    })
+    app.use("/", (req, res) => {
+      res.sendFile(path.join(__dirname, "frontend_dist", "index.html"));
+    });
 
     app.listen(PORT, () => {
       console.log(`server is running at port ${PORT}`);
