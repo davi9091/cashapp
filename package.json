@@ -5,7 +5,8 @@
   "author": "Arkady Rubtsov",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon ./index.ts",
+    "start": "node ./build/index.js",
+    "start-dev": "nodemon ./index.ts",
     "build": "tsc --project ./",
     "heroku-prebuild": "cd client && yarn install && yarn build"
   },
