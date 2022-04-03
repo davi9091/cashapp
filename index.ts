@@ -13,11 +13,14 @@ import { userRouter } from "./routes/user";
 import passport from "passport";
 import session from "express-session";
 import { initPassportUserStrategy } from "./passport-strategies/user";
+import path from "path";
 
 const app = express();
 const PORT = 3200;
+const appRoot = path.join(__dirname, 'build')
 
 app.use(cors());
+app.use(express.static(appRoot));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(
@@ -41,6 +44,11 @@ mongoose
     app.use(userRouter);
     app.use(fundsRouter);
     app.use(opsRouter);
+
+    app.use('/', (req, res) => {
+      res.sendFile(path.join(__dirname, 'build', 'index.html'))
+    })
+
     app.listen(PORT, () => {
       console.log(`server is running at port ${PORT}`);
     });
