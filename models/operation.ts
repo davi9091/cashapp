@@ -1,12 +1,12 @@
-import { fundSchema, IFundDoc } from './fund';
-import { Schema, Document, Model, model } from "mongoose";
+import { fundSchema, IFundDoc } from './fund'
+import { Schema, Document, Model, model } from 'mongoose'
 
-export interface IOperationDoc extends Document<Schema.Types.ObjectId, {}> {
-  fund: IFundDoc;
-  amount: number;
-  groupName: string;
-  creationDate: number;
-  label: string;
+export interface IOperationDoc extends Document<Schema.Types.ObjectId, unknown> {
+  fund: IFundDoc
+  amount: number
+  groupName: string
+  creationDate: number
+  label: string
 }
 
 const operationSchema: Schema<IOperationDoc> = new Schema({
@@ -27,6 +27,9 @@ const operationSchema: Schema<IOperationDoc> = new Schema({
     type: String,
     required: true,
   },
-});
+})
 
-export const Operation: Model<IOperationDoc> = model("Operation", operationSchema);
+export const Operation: Model<IOperationDoc> = model(
+  'Operation',
+  operationSchema,
+)

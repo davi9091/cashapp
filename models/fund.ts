@@ -1,11 +1,11 @@
-import { Schema, Document, Model, model } from "mongoose";
-import { IUserDoc, userSchema } from "./user";
+import { Schema, Document, Model, model } from 'mongoose'
+import { IUserDoc, userSchema } from './user'
 
-export interface IFundDoc extends Document<Schema.Types.ObjectId, {}> {
-  owner: IUserDoc;
-  currencyId: string;
-  amount: number;
-  name?: string;
+export interface IFundDoc extends Document<Schema.Types.ObjectId, unknown> {
+  owner: IUserDoc
+  currencyId: string
+  amount: number
+  name?: string
 }
 
 export const fundSchema: Schema<IFundDoc> = new Schema({
@@ -22,6 +22,6 @@ export const fundSchema: Schema<IFundDoc> = new Schema({
     type: String,
     required: false,
   },
-});
+})
 
-export const Fund: Model<IFundDoc> = model("Fund", fundSchema);
+export const Fund: Model<IFundDoc> = model('Fund', fundSchema)

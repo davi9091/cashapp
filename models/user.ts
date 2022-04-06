@@ -1,19 +1,19 @@
-import { Document, Model, model, Schema } from "mongoose";
-import bcrypt from "bcrypt";
+import { Document, Model, model, Schema } from 'mongoose'
+import bcrypt from 'bcrypt'
 
-const SALT_WORK_FACTOR = 10;
+const SALT_WORK_FACTOR = 10
 
-export interface IUserDoc extends Document<Schema.Types.ObjectId, {}> {
-  username: string;
-  password: string;
-  firstName: string;
-  defaultCurrencyId: string;
-  lastName?: string;
+export interface IUserDoc extends Document<Schema.Types.ObjectId, unknown> {
+  username: string
+  password: string
+  firstName: string
+  defaultCurrencyId: string
+  lastName?: string
 
   comparePasswords: <T>(
     candidatePassword: string,
-    cb: (error: Error, match: T) => void
-  ) => T;
+    cb: (error: Error, match: T) => void,
+  ) => T
 }
 
 export const userSchema: Schema<IUserDoc> = new Schema({
@@ -37,35 +37,33 @@ export const userSchema: Schema<IUserDoc> = new Schema({
     type: String,
     required: false,
   },
-});
+})
 
-userSchema.pre("save", async function (next) {
-  const user = this; //TODO: type this!
-
-  if (!user.isModified("password")) {
-    next();
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next()
   }
 
   try {
-    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-    const hash = await bcrypt.hash(user.password, salt);
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    const hash = await bcrypt.hash(this.password, salt)
 
-    user.password = hash;
-    next();
+    this.password = hash
+    next()
   } catch (e: any) {
-    next(e);
+    next(e)
   }
-});
+})
 
 userSchema.methods.comparePasswords = async function (candidatePassword, cb) {
-  const { password } = this;
+  const { password } = this
 
   try {
-    const match = await bcrypt.compare(candidatePassword, password);
-    cb(null, match);
+    const match = await bcrypt.compare(candidatePassword, password)
+    cb(null, match)
   } catch (error) {
-    return cb(error);
+    return cb(error)
   }
-};
+}
 
-export const User: Model<IUserDoc> = model("User", userSchema);
+export const User: Model<IUserDoc> = model('User', userSchema)
