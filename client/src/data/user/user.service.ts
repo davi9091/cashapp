@@ -5,7 +5,7 @@ import { getAllCurrencies, getDefaultCurrency } from './utils/currencies'
 
 const USER_ENDPOINTS = {
   login: 'user/login',
-  register: '/user/register',
+  register: 'user/register',
   restore: 'user/restore',
 }
 
