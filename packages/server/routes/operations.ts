@@ -24,7 +24,6 @@ opsRouter.get('/operations/:fundId', async (req, res) => {
 
     const ops = await Operation.find({ ['fund._id']: fundId })
       .sort('-creationDate')
-      .limit(10)
       .exec()
 
     res.status(HttpStatusCode.OK).send(ops)
