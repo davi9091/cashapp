@@ -1,0 +1,13 @@
+import createProxyMiddleware from 'http-proxy-middleware';
+
+const middleware = (app) => {
+  app.use(
+    '/api',
+    createProxyMiddleware({
+      target: 'http://localhost:3200',
+      changeOrigin: true,
+    })
+  )
+}
+
+export default middleware
