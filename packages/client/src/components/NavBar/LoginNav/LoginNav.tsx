@@ -4,11 +4,12 @@ import {
   UserLoginData,
   UserRegisterData,
 } from '../../../data/user/types'
-import styles from './LoginNav.module.css'
 import { Button } from '@mui/material'
 import { FormDialog } from '../../FormDialog/FormDialog'
 import { Login } from '../../Login/Login'
 import { Register } from '../../Register/Register'
+
+import styles from './LoginNav.module.css'
 
 type Props = {
   onLogin: (data: UserLoginData) => Promise<AuthError | null>
@@ -23,8 +24,7 @@ export const LoginNav: React.FC<Props> = (props) => {
       <Button onClick={() => setIsLoginOpen(true)} type="button">
         Sign in
       </Button>
-      <span>|</span>
-      <Button onClick={() => setIsRegisterOpen(true)} type="button">
+      <Button variant="outlined" onClick={() => setIsRegisterOpen(true)} type="button">
         Sign up
       </Button>
 

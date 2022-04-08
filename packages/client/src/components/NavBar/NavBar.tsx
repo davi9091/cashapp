@@ -4,7 +4,7 @@ import { User } from '../../data/user/types'
 import { IUserService } from '../../data/user/user.service'
 import { LoginNav } from './LoginNav/LoginNav'
 
-import styles from './UserView.module.css'
+import styles from './NavBar.module.css'
 
 function stringToColor(str: string) {
   let hash = 0
@@ -40,9 +40,9 @@ type Props = {
   userService: IUserService
   user: User | null
 }
-export const UserView: React.FC<Props> = ({ userService, user }) => {
+export const NavBar: React.FC<Props> = ({ userService, user }) => {
   return (
-    <div>
+    <div className={styles.container}>
       {!user && (
         <LoginNav
           onLogin={(data) => userService.login(data)}
@@ -51,7 +51,7 @@ export const UserView: React.FC<Props> = ({ userService, user }) => {
       )}
 
       {user && (
-        <div className={styles.userContainer}>
+        <div className={styles.loggedIn}>
           <div>
             <Avatar
               alt={user.firstName}
