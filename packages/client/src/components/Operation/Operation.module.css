@@ -1,0 +1,10 @@
+.operation {
+  background-color: white;
+  height: 36px;
+  line-height: 36px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}

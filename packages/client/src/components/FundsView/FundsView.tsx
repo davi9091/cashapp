@@ -55,10 +55,9 @@ export const FundsView: React.FC<Props> = ({
   const handleSelectFund = (fund: Fund) => fundsService.selectedFund$.next(fund)
 
   return (
-    <div>
-      {activeFund ? (
-        <div className={styles.view}>
-
+    <div className={styles.container}>
+      <div className={styles.view}>
+        {activeFund ? (
           <div className={styles.fundsContainer}>
             <FundsList
               allFunds={funds}
@@ -66,17 +65,18 @@ export const FundsView: React.FC<Props> = ({
               onSelectActive={handleSelectFund}
             />
           </div>
-        </div>
-      ) : null}
+        ) : null}
 
-      <Button type="button" variant="outlined" onClick={handleOpen}>
-        Create new fund
-      </Button>
-      <AddFundDialog
-        defaultCurrency={defaultCurrency}
-        isOpen={isAddFundDialogOpen}
-        onClose={handleClose}
-      />
+        <Button type="button" variant="outlined" onClick={handleOpen}>
+          Create new fund
+        </Button>
+
+        <AddFundDialog
+          defaultCurrency={defaultCurrency}
+          isOpen={isAddFundDialogOpen}
+          onClose={handleClose}
+        />
+      </div>
     </div>
   )
 }

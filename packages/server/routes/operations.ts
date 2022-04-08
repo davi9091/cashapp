@@ -23,7 +23,7 @@ opsRouter.get('/operations/:fundId', async (req, res) => {
       throw new Error(`No fund with id ${fundId} that belongs to you was found`)
 
     const ops = await Operation.find({ ['fund._id']: fundId })
-      .sort('-date')
+      .sort('-creationDate')
       .limit(10)
       .exec()
 

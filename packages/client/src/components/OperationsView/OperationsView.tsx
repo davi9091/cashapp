@@ -6,6 +6,8 @@ import { OperationsService } from '../../data/operations/operations.service'
 import { AddOperationComponent } from '../AddOperation/AddOperation'
 import { OperationComponent } from '../Operation/Operation'
 
+import styles from './OperationsView.module.css'
+
 type Props = {
   operationsService: OperationsService
   activeFund$: BehaviorSubject<Fund | null>
@@ -35,7 +37,7 @@ export const OperationsView: React.FC<Props> = ({
     operationsService.addOperation(operation)
 
   return activeFund ? (
-    <div>
+    <div className={styles.container}>
       <AddOperationComponent
         fund={activeFund}
         onSubmit={handleOperationSubmit}

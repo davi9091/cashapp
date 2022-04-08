@@ -5,10 +5,8 @@
   "author": "Arkady Rubtsov",
   "license": "MIT",
   "scripts": {
-    "start": "node ./build/index.js",
-    "start-dev": "DEV_ENV=true nodemon ./index.ts",
-    "build": "tsc --project ./",
-    "heroku-postbuild": "yarn build && cd client && yarn install && yarn build && mkdir ../build/client && cp -R build/* ../build/client/"
+    "start": "DEV_ENV=true nodemon ./index.ts",
+    "build": "tsc --project ./"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.1",

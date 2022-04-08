@@ -3,6 +3,8 @@ import React from 'react'
 import { AddFund, Fund } from '../../data/funds/types'
 import { CurrencyInput } from '../CurrencyInput/CurrencyInput'
 
+import styles from './AvailableFunds.module.css';
+
 type Props<T = Fund | AddFund> = {
   funds: T
   className?: string
@@ -14,7 +16,7 @@ type Props<T = Fund | AddFund> = {
 
 export const AvailableFundsComponent: React.FC<Props> = (props) => {
   return (
-    <div>
+    <div className={styles.fund}>
       <CurrencyInput
         amount={props.funds.amount}
         currencySign={props.funds.currency.sign}

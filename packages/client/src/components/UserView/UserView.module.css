@@ -5,6 +5,8 @@
   height: 32px;
   padding: 5px;
   margin-left: -5px;
+  background-color: white;
+  box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
 }
 
 .userContainer > * {

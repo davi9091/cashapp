@@ -1,0 +1,8 @@
+.container {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+
+  margin: auto;
+  max-width: 550px;
+}

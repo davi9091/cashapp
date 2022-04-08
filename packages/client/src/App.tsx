@@ -7,6 +7,8 @@ import { IUserService } from './data/user/user.service'
 import { OperationsService } from './data/operations/operations.service'
 import { OperationsView } from './components/OperationsView/OperationsView'
 
+import appStyle from './App.module.css';
+
 type Props = {
   userService: IUserService
   fundsService: IFundsService
@@ -30,19 +32,19 @@ export const App: React.FC<Props> = ({
   })
 
   return (
-    <div className="App">
+    <div className={appStyle.App}>
       <UserView user={currentUser} userService={userService} />
 
       {currentUser && (
-        <div>
-          <FundsView
-            fundsService={fundsService}
-            defaultCurrency={currentUser.defaultCurrency}
-          />
-
+        <div className={appStyle.AppContainer}>
           <OperationsView
             operationsService={operationsService}
             activeFund$={fundsService.selectedFund$}
+          />
+
+          <FundsView
+            fundsService={fundsService}
+            defaultCurrency={currentUser.defaultCurrency}
           />
         </div>
       )}
