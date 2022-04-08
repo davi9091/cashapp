@@ -7,6 +7,8 @@ import { useLoading, useMemoizedCurrencies } from '../hooks'
 import { getDefaultCurrency } from '../../data/user/utils/currencies'
 import { CurrencySelect } from '../CurrencySelect/CurrencySelect'
 
+import commonStyles from '../common.module.css'
+
 type Props = {
   onSubmit: (data: UserRegisterData) => Promise<AuthError | null>
   onClose: () => void
@@ -35,7 +37,7 @@ export const Register: React.FC<Props> = ({ onSubmit, onClose }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={commonStyles.form} onSubmit={handleSubmit}>
       <TextField
         type="username"
         id="login"
@@ -63,10 +65,14 @@ export const Register: React.FC<Props> = ({ onSubmit, onClose }) => {
       <TextField
         type="lastName"
         id="lastName"
-        label="lastName"
+        label="Last Name"
         onChange={onInputChange(setLastName)}
       />
-      <CurrencySelect onChange={setCurrency} value={currency} currencies={currencies} />
+      <CurrencySelect
+        onChange={setCurrency}
+        value={currency}
+        currencies={currencies}
+      />
 
       <LoadingButton loading={loading} type="submit">
         Sign up

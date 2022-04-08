@@ -5,6 +5,8 @@ import { AuthError, UserLoginData } from '../../data/user/types'
 import { onInputChange } from '../utils'
 import { useLoading } from '../hooks'
 
+import commonStyles from '../common.module.css'
+
 type Props = {
   onSubmit: (data: UserLoginData) => Promise<AuthError | null>
   onClose: () => void
@@ -21,7 +23,7 @@ export const Login: React.FC<Props> = ({ onSubmit, onClose }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={commonStyles.form} onSubmit={handleSubmit}>
       {error && <div>{error}</div>}
       <TextField
         type="text"

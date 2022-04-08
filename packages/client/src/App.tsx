@@ -6,8 +6,9 @@ import { IUserService } from './data/user/user.service'
 import { OperationsService } from './data/operations/operations.service'
 import { OperationsView } from './components/OperationsView/OperationsView'
 
-import appStyle from './App.module.css';
-import {NavBar} from './components/NavBar/NavBar'
+import appStyle from './App.module.css'
+import { NavBar } from './components/NavBar/NavBar'
+import { Landing } from './components/Landing/Landing'
 
 type Props = {
   userService: IUserService
@@ -34,6 +35,8 @@ export const App: React.FC<Props> = ({
   return (
     <div className={appStyle.App}>
       <NavBar user={currentUser} userService={userService} />
+
+      {!currentUser && <Landing />}
 
       {currentUser && (
         <div className={appStyle.AppContainer}>
