@@ -27,13 +27,14 @@ userRouter.post(
 )
 
 userRouter.post('/user/restore', async (req, res) => {
-  const isAuthenticated = req.isAuthenticated()
+  console.log('user', req.user, req.isAuthenticated())
   const user = req.user
+  const isAuthenticated = req.isAuthenticated()
 
   if (isAuthenticated && user) {
     return res.status(HttpStatusCode.OK).send(user)
   }
-  return res.status(HttpStatusCode.UNAUTHORIZED)
+  return res.status(HttpStatusCode.UNAUTHORIZED).send()
 })
 
 userRouter.post(

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { User } from './data/user/types'
 import { IFundsService } from './data/funds/funds.service'
 import { FundsView } from './components/FundsView/FundsView'
-import { IUserService } from './data/user/user.service'
+import { IUserService, RESTORING_USER } from './data/user/user.service'
 import { OperationsService } from './data/operations/operations.service'
 import { OperationsView } from './components/OperationsView/OperationsView'
 
 import appStyle from './App.module.css'
 import { NavBar } from './components/NavBar/NavBar'
 import { Landing } from './components/Landing/Landing'
+import { CircularProgress } from '@mui/material'
 
 type Props = {
   userService: IUserService
@@ -20,9 +21,9 @@ export const App: React.FC<Props> = ({
   fundsService,
   operationsService,
 }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(
-    userService.user$.getValue(),
-  )
+  const [currentUser, setCurrentUser] = useState<
+    User | null | typeof RESTORING_USER
+  >(userService.user$.getValue())
 
   useEffect(() => {
     const subscription = userService.user$.subscribe((user) =>
@@ -33,24 +34,32 @@ export const App: React.FC<Props> = ({
   })
 
   return (
-    <div className={appStyle.App}>
-      <NavBar user={currentUser} userService={userService} />
-
-      {!currentUser && <Landing />}
-
-      {currentUser && (
-        <div className={appStyle.AppContainer}>
-          <OperationsView
-            operationsService={operationsService}
-            activeFund$={fundsService.selectedFund$}
-          />
-
-          <FundsView
-            fundsService={fundsService}
-            defaultCurrency={currentUser.defaultCurrency}
-          />
+    <div>
+      {currentUser === RESTORING_USER ? (
+        <div className={appStyle.loadingPage}>
+          <CircularProgress />
         </div>
-      )}
+      ) : (
+        <div className={appStyle.App}>
+          <NavBar user={currentUser} userService={userService} />
+
+          {!currentUser && <Landing />}
+
+          {currentUser && (
+            <div className={appStyle.AppContainer}>
+              <OperationsView
+                operationsService={operationsService}
+                activeFund$={fundsService.selectedFund$}
+              />
+
+              <FundsView
+                fundsService={fundsService}
+                defaultCurrency={currentUser.defaultCurrency}
+              />
+            </div>
+          )}
+        </div>
+      )}{' '}
     </div>
   )
 }

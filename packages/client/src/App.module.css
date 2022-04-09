@@ -5,6 +5,14 @@
   height: 100vh;
 }
 
+.loadingPage {
+  height: 100vh;
+  line-height: 100vh;
+  width: 100vw;
+  text-align: center;
+  background-color: #d9d9d9;
+}
+
 .AppContainer {
   display: flex;
   flex-direction: row;

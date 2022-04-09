@@ -13,17 +13,20 @@ const USER_STORAGE = {
   data: 'USER_DATA',
 }
 
+export const RESTORING_USER = 'restoring' as const
+
 export interface IUserService {
-  readonly user$: BehaviorSubject<User | null>
+  readonly user$: BehaviorSubject<User | typeof RESTORING_USER | null>
 
   login(loginData: UserLoginData): Promise<AuthError | null>
   logout(): Promise<void>
   register(loginData: UserLoginData): Promise<AuthError | null>
 }
 export class UserService implements IUserService {
-  user$ = new BehaviorSubject<User | null>(this.restoreUser())
+  user$ = new BehaviorSubject<User | typeof RESTORING_USER | null>(RESTORING_USER)
 
   constructor() {
+    this.restoreUser()
     this.startPreservingUser()
   }
 
@@ -39,7 +42,7 @@ export class UserService implements IUserService {
       )
 
       if (userResponse.status === 401) {
-        throw 401
+        throw new Error('401')
       }
       const user: UserResponse = await userResponse.json()
 
@@ -53,16 +56,7 @@ export class UserService implements IUserService {
     }
   }
 
-  restoreUser(): User | null {
-    const user = localStorage.getItem(USER_STORAGE.data)
-
-    if (!user) return null
-
-    this.sendRestoreReq()
-    return JSON.parse(user)
-  }
-
-  async sendRestoreReq() {
+  async restoreUser() {
     const restoreResponse = await fetch(USER_ENDPOINTS.restore, getHeaders())
 
     if (restoreResponse.status === 401) {
