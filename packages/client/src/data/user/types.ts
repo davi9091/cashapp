@@ -9,14 +9,12 @@ export type User = {
   firstName: string
   lastName: string
   username: string
-  defaultCurrency: Currency
 }
 
 export type UserResponse = {
   firstName: string
   lastName: string
   username: string
-  defaultCurrencyId: string
 }
 
 export type UserLoginData = {
@@ -29,7 +27,6 @@ export type UserRegisterData = {
   password: string
   firstName: string
   lastName: string
-  defaultCurrencyId?: string
 }
 
 export type Currency = {

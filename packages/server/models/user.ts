@@ -29,10 +29,6 @@ export const userSchema: Schema<IUserDoc> = new Schema({
     type: String,
     required: true,
   },
-  defaultCurrencyId: {
-    type: String,
-    required: true,
-  },
   lastName: {
     type: String,
     required: false,

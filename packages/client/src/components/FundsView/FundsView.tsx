@@ -11,11 +11,9 @@ import styles from './FundsView.module.css'
 
 type Props = {
   fundsService: IFundsService
-  defaultCurrency: Currency
 }
 export const FundsView: React.FC<Props> = ({
   fundsService,
-  defaultCurrency,
 }) => {
   const [isAddFundDialogOpen, setIsAddFundDialogOpen] = useState(false)
   const [activeFund, setActiveFund] = useState<Fund>()
@@ -46,8 +44,7 @@ export const FundsView: React.FC<Props> = ({
   ) => {
     if (!newFund) return setIsAddFundDialogOpen(false)
 
-    const createdFund = await fundsService.addFunds(newFund, saveAndSelect)
-    console.log(createdFund)
+    await fundsService.addFunds(newFund, saveAndSelect)
 
     return setIsAddFundDialogOpen(false)
   }
@@ -72,7 +69,6 @@ export const FundsView: React.FC<Props> = ({
         </Button>
 
         <AddFundDialog
-          defaultCurrency={defaultCurrency}
           isOpen={isAddFundDialogOpen}
           onClose={handleClose}
         />

@@ -39,6 +39,7 @@ export class OperationsService {
   async addOperation(operation: AddOperation) {
     await addOperation(operation)
     this.#updateCallback()
+    this.operations$.next(await this.fetchOperations(operation.fundId))
   }
 }
 

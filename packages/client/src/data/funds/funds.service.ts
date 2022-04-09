@@ -75,7 +75,7 @@ export class FundsService {
     this.#fetchFunds().then((allFunds) => {
       this.funds$.next(allFunds)
     
-      saveAndSelect && this.selectedFund$.next(allFunds[fund.id])
+      if (saveAndSelect || Object.keys(allFunds).length === 1) this.selectedFund$.next(allFunds[fund.id])
     })
 
     return fund

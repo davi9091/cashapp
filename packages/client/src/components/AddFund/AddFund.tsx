@@ -1,7 +1,7 @@
 import { Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { AddFund } from '../../data/funds/types'
-import { Currency } from '../../data/user/types'
+import {getDefaultCurrency} from '../../data/user/utils/currencies'
 import { CurrencyInputWithSelect } from '../CurrencyInput/CurrencyInputWithSelect'
 import { useMemoizedCurrencies } from '../hooks'
 
@@ -11,11 +11,10 @@ const MAX_NAME_LENGTH = 30
 
 type Props = {
   onCreateFund: (fund: AddFund | null, saveAndClose: boolean) => void
-  defaultCurrency: Currency
 }
 export const AddFundComponent: React.FC<Props> = (props) => {
   const [strAmount, setStrAmount] = useState('')
-  const [currency, setCurrency] = useState(props.defaultCurrency)
+  const [currency, setCurrency] = useState(getDefaultCurrency())
   const [name, setName] = useState('')
 
   const currencies = useMemoizedCurrencies()

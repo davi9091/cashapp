@@ -100,19 +100,9 @@ export class UserService implements IUserService {
 }
 
 function userResponseToModel(resp: UserResponse): User {
-  const currencies = getAllCurrencies()
-
-  const defaultCurrency = getDefaultCurrency()
-  const userCurrency = currencies.find(
-    (cur) => resp.defaultCurrencyId === cur.id,
-  )
-
-  if (!userCurrency) {
-    console.error('No default currency was found for user, setting default')
-  }
-
   return {
-    ...resp,
-    defaultCurrency: userCurrency || defaultCurrency,
+    username: resp.username,
+    firstName: resp.firstName,
+    lastName: resp.lastName,
   }
 }

@@ -54,7 +54,6 @@ export const App: React.FC<Props> = ({
 
               <FundsView
                 fundsService={fundsService}
-                defaultCurrency={currentUser.defaultCurrency}
               />
             </div>
           )}

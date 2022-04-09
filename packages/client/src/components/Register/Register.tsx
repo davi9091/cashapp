@@ -1,11 +1,9 @@
 import { TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import React, { useState } from 'react'
-import { AuthError, Currency, UserRegisterData } from '../../data/user/types'
+import { AuthError, UserRegisterData } from '../../data/user/types'
 import { onInputChange } from '../utils'
-import { useLoading, useMemoizedCurrencies } from '../hooks'
-import { getDefaultCurrency } from '../../data/user/utils/currencies'
-import { CurrencySelect } from '../CurrencySelect/CurrencySelect'
+import { useLoading } from '../hooks'
 
 import commonStyles from '../common.module.css'
 
@@ -18,9 +16,6 @@ export const Register: React.FC<Props> = ({ onSubmit, onClose }) => {
   const [password, setPassword] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [currency, setCurrency] = useState<Currency>(getDefaultCurrency())
-
-  const currencies = useMemoizedCurrencies()
 
   const { loading, trigger } = useLoading(onClose)
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
@@ -31,7 +26,6 @@ export const Register: React.FC<Props> = ({ onSubmit, onClose }) => {
         password,
         firstName,
         lastName,
-        defaultCurrencyId: currency.id,
       }),
     )
   }
@@ -67,11 +61,6 @@ export const Register: React.FC<Props> = ({ onSubmit, onClose }) => {
         id="lastName"
         label="Last Name"
         onChange={onInputChange(setLastName)}
-      />
-      <CurrencySelect
-        onChange={setCurrency}
-        value={currency}
-        currencies={currencies}
       />
 
       <LoadingButton loading={loading} type="submit">
