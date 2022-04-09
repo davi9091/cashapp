@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   background-color: #d9d9d9;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .loadingPage {
