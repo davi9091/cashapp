@@ -1,15 +1,11 @@
-
-
 .form {
   display: flex;
   padding: 10px;
-  margin: 10px;
+  margin: 5px;
   background-color: white;
   border-radius: 5px;
 }
 
-
-.form > * {
+.form > *:not(:last-child){
   margin-right: 5px !important;
 }
-

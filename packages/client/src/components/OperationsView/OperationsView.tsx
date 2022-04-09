@@ -43,7 +43,7 @@ export const OperationsView: React.FC<Props> = ({
         onSubmit={handleOperationSubmit}
       />
 
-      {loading && <CircularProgress />}
+    {loading && <CircularProgress className={styles.loading} />}
 
       {!loading &&
         operations &&
