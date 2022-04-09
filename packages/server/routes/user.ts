@@ -27,7 +27,6 @@ userRouter.post(
 )
 
 userRouter.post('/user/restore', async (req, res) => {
-  console.log('user', req.user, req.isAuthenticated())
   const user = req.user
   const isAuthenticated = req.isAuthenticated()
 
