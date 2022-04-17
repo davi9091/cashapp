@@ -1,6 +1,6 @@
 import { Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import { AddFund } from '../../data/funds/types'
+import { AddFund, Fund } from '../../data/funds/types'
 import {getDefaultCurrency} from '../../data/user/utils/currencies'
 import { CurrencyInputWithSelect } from '../CurrencyInput/CurrencyInputWithSelect'
 import { useMemoizedCurrencies } from '../hooks'
@@ -10,12 +10,13 @@ import styles from './AddFund.module.css'
 const MAX_NAME_LENGTH = 30
 
 type Props = {
-  onCreateFund: (fund: AddFund | null, saveAndClose: boolean) => void
+  onSave: (fund: AddFund | Fund | null, saveAndSelect: boolean) => void
+  fund: Fund | null
 }
-export const AddFundComponent: React.FC<Props> = (props) => {
-  const [strAmount, setStrAmount] = useState('')
-  const [currency, setCurrency] = useState(getDefaultCurrency())
-  const [name, setName] = useState('')
+export const AddFundComponent: React.FC<Props> = ({onSave, fund}) => {
+  const [strAmount, setStrAmount] = useState(String(fund?.amount || ''))
+  const [currency, setCurrency] = useState(fund?.currency || getDefaultCurrency())
+  const [name, setName] = useState(fund?.name || '')
 
   const currencies = useMemoizedCurrencies()
 
@@ -27,18 +28,19 @@ export const AddFundComponent: React.FC<Props> = (props) => {
     setName(name)
   }
 
-  const handleCreateFund = (saveAndClose: boolean) => {
+  const handleCreateFund = (saveAndSelect: boolean) => {
     const amount = Number(strAmount)
 
     if (!amount) return
 
-    const fund: AddFund = {
+    const toSave = {
+      ...fund,
       amount,
       currency,
       name,
     }
 
-    return props.onCreateFund(fund, saveAndClose)
+    return onSave(toSave, saveAndSelect)
   }
 
   return (
@@ -69,7 +71,7 @@ export const AddFundComponent: React.FC<Props> = (props) => {
           type="button"
           onClick={() => handleCreateFund(false)}
         >
-          Add
+          Save
         </Button>
 
         <Button
@@ -77,14 +79,14 @@ export const AddFundComponent: React.FC<Props> = (props) => {
           type="button"
           onClick={() => handleCreateFund(true)}
         >
-          Add and select
+          Save and select
         </Button>
 
         <Button 
           variant="outlined"
           type="button"
           color="error"
-          onClick={() => props.onCreateFund(null, false)}
+          onClick={() => onSave(null, false)}
         >
           Cancel
         </Button>

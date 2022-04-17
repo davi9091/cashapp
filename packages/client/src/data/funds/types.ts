@@ -21,6 +21,7 @@ export type AddFund = {
   amount: number
   currency: Currency
   name: string
+  id?: IDType
 }
 
 export type OperationGroup = {

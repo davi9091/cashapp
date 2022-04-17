@@ -8,20 +8,26 @@ import { AddFund, Fund, FundResponse } from './types'
 const FETCH_ENDPOINTS = {
   getFunds: '/funds',
   newFund: '/funds/new',
+  removeFund: '/funds',
+  editFund: '/funds/edit',
 }
+
 export interface IFundsService {
   funds$: BehaviorSubject<Record<IDType, Fund>>
   selectedFund$: BehaviorSubject<Fund | null>
 
   addFunds(newFund: AddFund, saveAndSelect?: boolean): Promise<Fund>
-  changeFundAmount(change: number, fundId: IDType): Fund
-  updateCallback: () => void
+  editFund(fund: AddFund, saveAndSelect?: boolean): Promise<Fund>
+  removeFund(fundId: IDType): Promise<void>
+  updateCallback: (dropSelected?: boolean) => void
 }
-export class FundsService {
+export class FundsService implements IFundsService {
   #userService: IUserService
 
   funds$ = new BehaviorSubject<Record<IDType, Fund>>({})
   selectedFund$ = new BehaviorSubject<Fund | null>(null)
+  updateCallback = (dropSelected?: boolean) =>
+    this.#fetchFunds().then((funds) => this.#nextFunds(funds, dropSelected))
 
   constructor(userService: IUserService) {
     this.#userService = userService
@@ -32,38 +38,30 @@ export class FundsService {
         this.selectedFund$.next(null)
         return
       }
-      this.#fetchFunds().then(this.#nextFunds)
+      this.updateCallback(true)
     })
   }
 
-  #nextFunds = (allFunds: Record<string, Fund>) => {
+  #nextFunds = (
+    allFunds: Record<string, Fund>,
+    dropSelected = false,
+    fundToSelect?: Fund,
+  ) => {
     this.funds$.next(allFunds)
     const fundsArr = Object.values(allFunds)
 
-    this.selectedFund$.next(fundsArr.length ? fundsArr[0] : null) 
-  }
+    const currentSelected = fundsArr.find(
+      (fund) => fund.id === this.selectedFund$.getValue()?.id,
+    )
 
-  updateCallback = () => {
-    this.#fetchFunds().then()
-  }
+    const newSelected =
+      fundToSelect || fundsArr.length
+        ? !dropSelected && currentSelected
+          ? currentSelected
+          : fundsArr[0]
+        : null
 
-  changeFundAmount(change: number, fundId: IDType) {
-    const fund = fundId
-      ? this.funds$.getValue()[fundId]
-      : this.selectedFund$.getValue()
-
-    if (!fund) throw new Error(`Fund with id ${fundId} not found!`)
-
-    return this.changeFund({ ...fund, amount: fund.amount + change })
-  }
-
-  changeFund(changedFund: Fund) {
-    this.funds$.getValue()[changedFund.id] = changedFund
-    if (this.selectedFund$.getValue()?.id === changedFund.id) {
-      this.selectedFund$.next(changedFund)
-    }
-
-    return changedFund
+    this.selectedFund$.next(newSelected)
   }
 
   async addFunds(newFund: AddFund, saveAndSelect = false) {
@@ -74,11 +72,21 @@ export class FundsService {
 
     this.#fetchFunds().then((allFunds) => {
       this.funds$.next(allFunds)
-    
-      if (saveAndSelect || Object.keys(allFunds).length === 1) this.selectedFund$.next(allFunds[fund.id])
+
+      if (saveAndSelect || Object.keys(allFunds).length === 1)
+        this.selectedFund$.next(fund)
     })
 
     return fund
+  }
+
+  async editFund(fund: Fund, saveAndSelect = false) {
+    const editedFund = await this.#editFund(fund)
+
+    const updatedFunds = await this.#fetchFunds()
+    this.#nextFunds(updatedFunds, false, saveAndSelect ? editedFund : undefined)
+
+    return editedFund
   }
 
   async #addFund(newFund: AddFund) {
@@ -94,6 +102,40 @@ export class FundsService {
     } catch (err) {
       console.error(err)
       throw err
+    }
+  }
+
+  async removeFund(id: IDType) {
+    try {
+      const removeResponse = await fetch(
+        FETCH_ENDPOINTS.removeFund + `/${id}`,
+        getHeaders(undefined, 'DELETE'),
+      )
+
+      if (removeResponse.status > 399) {
+        throw new Error(removeResponse.statusText)
+      }
+
+      return this.updateCallback()
+    } catch (error) {
+      console.error('[FundsService]: Error while deleting funds', error)
+      throw error
+    }
+  }
+
+  async #editFund(fund: Fund) {
+    try {
+      const editResponse = await fetch(
+        FETCH_ENDPOINTS.editFund + `/${fund.id}`,
+        getHeaders({ ...fund, currencyId: fund.currency.id, }, 'POST'),
+      )
+
+      const resp: FundResponse = await editResponse.json()
+      console.log(fundResponseToModel(resp))
+      return fundResponseToModel(resp)
+    } catch (error) {
+      console.error('[FundsService]: Error while editing fund', error)
+      throw error
     }
   }
 

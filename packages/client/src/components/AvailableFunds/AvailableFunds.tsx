@@ -1,9 +1,9 @@
-import { TextFieldProps } from '@mui/material'
+import { Button, TextFieldProps } from '@mui/material'
 import React from 'react'
 import { AddFund, Fund } from '../../data/funds/types'
 import { CurrencyInput } from '../CurrencyInput/CurrencyInput'
 
-import styles from './AvailableFunds.module.css';
+import styles from './AvailableFunds.module.css'
 
 type Props<T = Fund | AddFund> = {
   funds: T
@@ -11,7 +11,8 @@ type Props<T = Fund | AddFund> = {
   textFieldProps?: TextFieldProps
   preventFocus?: boolean
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void
-  onChange?: (updatedFund: T) => void
+  onChange?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onRemove?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const AvailableFundsComponent: React.FC<Props> = (props) => {
@@ -30,6 +31,9 @@ export const AvailableFundsComponent: React.FC<Props> = (props) => {
             : null),
         }}
       />
+
+      {props.onRemove && <Button onClick={props.onRemove}>Delete</Button>}
+      {props.onChange && <Button onClick={props.onChange}>Change</Button>}
     </div>
   )
 }
