@@ -25,6 +25,7 @@ export type AddFund = {
 }
 
 export type OperationGroup = {
+  type: OPERATION_GROUPS,
   name: string
   defaultLabel: string
 }

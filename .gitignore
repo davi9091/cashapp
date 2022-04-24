@@ -2,7 +2,10 @@ config/
 node_modules/
 build/
 
+yarn-error.log
+
 .idea
 .vscode
 .DS_STORE
 .env
+

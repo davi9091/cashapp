@@ -12,18 +12,22 @@ export const getOperationGroups: () => Record<
   OperationGroup
 > = () => ({
   [OPERATION_GROUPS.NONE]: {
+    type: OPERATION_GROUPS.NONE,
     name: 'No',
     defaultLabel: 'General',
   },
   [OPERATION_GROUPS.GROCERY]: {
+    type: OPERATION_GROUPS.GROCERY,
     name: 'Grocery',
     defaultLabel: 'Grocery shopping',
   },
   [OPERATION_GROUPS.FUEL]: {
+    type: OPERATION_GROUPS.FUEL,
     name: 'Fuel',
     defaultLabel: 'Fuel',
   },
   [OPERATION_GROUPS.SALARY]: {
+    type: OPERATION_GROUPS.SALARY,
     name: 'Salary',
     defaultLabel: 'Salary',
   },

@@ -1,7 +1,8 @@
-import { Button, MenuItem, Select, TextField } from '@mui/material'
+import { Button, MenuItem, Select, TextField, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { getOperationGroups, OPERATION_GROUPS } from '../../data/funds/enums'
-import { AddOperation, Fund, OperationGroup } from '../../data/funds/types'
+import { AddOperation, Fund } from '../../data/funds/types'
+import {emojiMap} from '../../data/operations/emojiMapper'
 import { CurrencyInput } from '../CurrencyInput/CurrencyInput'
 
 import styles from './AddOperation.module.css'
@@ -33,7 +34,8 @@ export const AddOperationComponent: React.FC<AddOperationProps> = ({
     return onSubmit({
       amount: amountSaved,
       groupName: currentOperationGroup,
-      label: currentOpLabel || operationGroups[currentOperationGroup].defaultLabel,
+      label:
+        currentOpLabel || operationGroups[currentOperationGroup].defaultLabel,
       creationDate: Date.now(),
       fundId: fund.id,
     })
@@ -61,18 +63,18 @@ export const AddOperationComponent: React.FC<AddOperationProps> = ({
 
       <Select
         value={operationGroups[currentOperationGroup]}
-        renderValue={(group) => group.name}
+        renderValue={(group) => emojiMap[group.type]}
         onChange={(event) =>
           setCurrentOperationGroup(event.target.value as OPERATION_GROUPS)
         }
       >
-        {Object.values(OPERATION_GROUPS).map(
-          (t) => (
-            <MenuItem key={t} value={t}>
-              {operationGroups[t].name}
-            </MenuItem>
-          ),
-        )}
+        {Object.values(OPERATION_GROUPS).map((t) => (
+          <MenuItem key={t} value={t}>
+            <Tooltip arrow title={operationGroups[t].name} >
+              <div>{emojiMap[operationGroups[t].type]}</div>
+          </Tooltip>
+          </MenuItem>
+        ))}
       </Select>
 
       <CurrencyInput
