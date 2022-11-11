@@ -28,11 +28,12 @@
 .emoji {
   flex-grow: 0;
   font-size: 26px;
+  padding: 0 5px;
 }
 
 .timestamp {
   color: gray;
-  padding-left: 5px;
+  padding: 0 5px;
 }
 
 .rightSide {

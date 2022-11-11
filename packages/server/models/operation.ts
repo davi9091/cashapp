@@ -1,5 +1,5 @@
-import { fundSchema, IFundDoc } from './fund'
 import { Schema, Document, Model, model } from 'mongoose'
+import { fundSchema, IFundDoc } from './fund'
 
 export interface IOperationDoc extends Document<Schema.Types.ObjectId, unknown> {
   fund: IFundDoc

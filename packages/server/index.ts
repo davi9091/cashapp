@@ -13,6 +13,7 @@ import session from 'express-session'
 import { initPassportUserStrategy } from './passport-strategies/user'
 import path from 'path'
 import dotenv from 'dotenv'
+import {opGroupRouter} from './routes/customOpGroups'
 
 const isDevEnv = process.env.DEV_ENV === 'true'
 const app = express()
@@ -53,8 +54,9 @@ mongoose
     app.use(userRouter)
     app.use(fundsRouter)
     app.use(opsRouter)
+    app.use(opGroupRouter)
 
-    app.use('/', (req, res) => {
+    app.use('/', (_req, res) => {
       res.sendFile(path.join(appRoot, 'index.html'))
     })
 

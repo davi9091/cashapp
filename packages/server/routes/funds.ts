@@ -1,21 +1,10 @@
 import { NewFundBody } from './types'
-import { IUserDoc } from './../models/user'
 import { Fund } from './../models/fund'
 import HttpStatusCode from 'http-status-codes'
 import { Router } from 'express'
+import { getAuthUser } from './utils'
 
 export const fundsRouter = Router()
-
-function getAuthUser(req: Express.Request): IUserDoc | false {
-  const isAuthenticated = req.isAuthenticated()
-  const user = req.user as IUserDoc
-
-  if (user && isAuthenticated) {
-    return user
-  }
-
-  return false
-}
 
 fundsRouter.get('/funds', async (req, res) => {
   const user = getAuthUser(req)
@@ -52,7 +41,7 @@ fundsRouter.put('/funds/new', async (req, res) => {
     })
 
     const savedFund = await newFund.save()
-    return res.status(HttpStatusCode.OK).send(savedFund)
+    return res.status(HttpStatusCode.CREATED).send(savedFund)
   } catch (error) {
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
   }
@@ -100,12 +89,12 @@ fundsRouter.post('/funds/edit/:id', async (req, res) => {
     if (!fund) {
       return res.status(HttpStatusCode.NOT_FOUND).send()
     }
-    
+
     req.body.name && (fund.name = req.body.name)
     req.body.amount && (fund.amount = req.body.amount)
 
     await fund.save()
-    
+
     return res.status(HttpStatusCode.OK).send(fund)
   } catch (error) {
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)

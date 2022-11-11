@@ -12,6 +12,11 @@ export type NewOperationBody = {
   creationDate: number
 }
 
+export type NewOpGroupBody = {
+  name: string,
+  emoji: string,
+}
+
 export interface INotesBody {
   title: string
   body: string

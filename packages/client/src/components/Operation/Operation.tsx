@@ -33,21 +33,17 @@ export const OperationComponent: React.FC<OperationProps> = ({
       <div className={styles.details}>
         <div className={styles.emoji}>{emojiMap[operation.group.type]}</div>
 
+        <div className={styles.label}>{operation.label}</div>
         <div className={styles.timestamp}>
           <Tooltip arrow title={exactTime}>
             <div className={styles.timestamp}>{displayedTime}</div>
           </Tooltip>
         </div>
-        <div className={styles.label}>{operation.label}</div>
         <div className={styles.amount}>
           {isNegative ? ' - ' : ''}
           {currency.sign}
           {viewAmount}
         </div>
-      </div>
-
-      <div className={styles.rightSide}>
-        <Button variant="outlined">Info</Button>
       </div>
     </div>
   )
