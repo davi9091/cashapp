@@ -6,7 +6,8 @@ export interface ICustomOpGroupDoc
   owner: IUserDoc
   name: string
   emoji: string
-  isDefault: true
+  isDefault: false
+  isIncome: boolean
 }
 
 const customOpGroupSchema: Schema<ICustomOpGroupDoc> = new Schema({

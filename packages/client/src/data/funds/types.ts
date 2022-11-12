@@ -41,7 +41,7 @@ export type Operation = {
 
 export type AddOperation = {
   amount: number
-  groupName: OPERATION_GROUPS
+  groupName: string
   label: string
   fundId: string
   creationDate: number

@@ -5,6 +5,7 @@ export interface IDefaultGroupDoc
   name: string
   emoji: string
   isDefault: true
+  isIncome: boolean
 }
 
 const defaultOpGroupSchema: Schema<IDefaultGroupDoc> = new Schema({

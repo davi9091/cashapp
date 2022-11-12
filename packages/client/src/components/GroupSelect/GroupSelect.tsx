@@ -1,33 +1,56 @@
-import { Button, Menu, MenuItem, Select } from '@mui/material'
-import { getOperationGroups, OPERATION_GROUPS } from '../../data/funds/enums'
-import { emojiMap } from '../../data/operations/emojiMapper'
+import { Button, Menu, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { useState } from 'react'
+import { IGroupsService } from '../../data/Groups/groups.service'
+import { CustomOpGroup, OperationGroup } from '../../data/Groups/types'
 import { AddGroupDialog } from '../AddGroup/AddGroupDialog'
+import { useObservable } from '../hooks'
 
 import styles from './GroupSelect.module.css'
 
 type Props = {
-  selectedGroup: OPERATION_GROUPS
-  onChange: (group: OPERATION_GROUPS) => void
+  selectedGroup: OperationGroup | null
+  groupsService: IGroupsService
+  onChange: (group: OperationGroup | null) => void
 }
 
-export const GroupSelect = ({ selectedGroup, onChange }: Props) => {
-  const operationGroups = getOperationGroups()
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const onAddGroup = () => {}
+export const GroupSelect = ({
+  selectedGroup,
+  groupsService,
+  onChange,
+}: Props) => {
+  const operationGroups = useObservable(groupsService.groups$, [])
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const onClickAddGroup = () => {
+    setDialogOpen(true)
+  }
+
+  const onSelect = (event: SelectChangeEvent<string>) => {
+    const name = event.target.value;
+    console.log(name)
+
+    const newGroup = operationGroups.find(group => group.name === name)
+    onChange(newGroup || null)
+  }
+
+  console.log(selectedGroup);
+
+  const onDialogClose = (newGroup: CustomOpGroup) => {
+    onChange(newGroup)
+    groupsService.addGroup(newGroup)
+    setDialogOpen(false)
+  }
 
   return (
     <>
       <Select
-        value={operationGroups[selectedGroup]}
-        renderValue={(group) => emojiMap[group.type]}
-        onChange={(event) => onChange(event.target.value as OPERATION_GROUPS)}
+        value={selectedGroup?.name}
+        renderValue={() => selectedGroup?.emoji}
+        onChange={onSelect}
       >
-        {Object.values(OPERATION_GROUPS).map((t) => (
-          <MenuItem key={t} value={t}>
-            <div className={styles.emoji}>
-              {emojiMap[operationGroups[t].type]}
-            </div>
-            <div>{operationGroups[t].name}</div>
+        {operationGroups.map((t) => (
+          <MenuItem key={t.name} value={t.name}>
+            <div className={styles.emoji}>{t.emoji}</div>
+            <div>{t.name}</div>
           </MenuItem>
         ))}
 
@@ -36,16 +59,19 @@ export const GroupSelect = ({ selectedGroup, onChange }: Props) => {
          */}
         <MenuItem
           key="add-group"
-          value={OPERATION_GROUPS.ADD_NEW}
-          onClick={onAddGroup}
+          value={'new'}
+          onClick={onClickAddGroup}
         >
           <Button type="button" variant="outlined">
             Add new group
           </Button>
         </MenuItem>
       </Select>
-    
-      <AddGroupDialog isOpen={dialogOpen} onClose={(group) => onChange(group.type)}></AddGroupDialog>
+
+      <AddGroupDialog
+        isOpen={dialogOpen}
+        onClose={onDialogClose}
+      ></AddGroupDialog>
     </>
   )
 }

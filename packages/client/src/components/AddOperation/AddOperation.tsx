@@ -2,6 +2,8 @@ import { Button, MenuItem, Select, TextField, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { getOperationGroups, OPERATION_GROUPS } from '../../data/funds/enums'
 import { AddOperation, Fund } from '../../data/funds/types'
+import {IGroupsService} from '../../data/Groups/groups.service'
+import {OperationGroup} from '../../data/Groups/types'
 import { CurrencyInput } from '../CurrencyInput/CurrencyInput'
 import { GroupSelect } from '../GroupSelect/GroupSelect'
 
@@ -9,19 +11,19 @@ import styles from './AddOperation.module.css'
 
 type AddOperationProps = {
   fund: Fund
+  groupsService: IGroupsService
   onSubmit: (operation: AddOperation) => void
 }
 export const AddOperationComponent: React.FC<AddOperationProps> = ({
+  groupsService,
   fund,
   onSubmit,
 }) => {
   const [currentAmount, setCurrentAmount] = useState('')
   const [isDecreasing, setIsDecreasing] = useState(true)
   const [currentOperationGroup, setCurrentOperationGroup] =
-    useState<OPERATION_GROUPS>(OPERATION_GROUPS.NONE)
+    useState<OperationGroup | null>(null)
   const [currentOpLabel, setCurrentOpLabel] = useState<string>('')
-
-  const operationGroups = getOperationGroups()
 
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -31,11 +33,11 @@ export const AddOperationComponent: React.FC<AddOperationProps> = ({
 
     setCurrentAmount('')
 
-    return onSubmit({
+    return currentOperationGroup && onSubmit({
       amount: amountSaved,
-      groupName: currentOperationGroup,
+      groupName: currentOperationGroup.name,
       label:
-        currentOpLabel || operationGroups[currentOperationGroup].defaultLabel,
+        currentOpLabel || currentOperationGroup.emoji,
       creationDate: Date.now(),
       fundId: fund.id,
     })
@@ -62,6 +64,7 @@ export const AddOperationComponent: React.FC<AddOperationProps> = ({
       )}
 
       <GroupSelect
+        groupsService={groupsService}
         selectedGroup={currentOperationGroup}
         onChange={setCurrentOperationGroup}
       ></GroupSelect>
@@ -77,7 +80,7 @@ export const AddOperationComponent: React.FC<AddOperationProps> = ({
         value={currentOpLabel}
         onChange={(event) => setCurrentOpLabel(event.target.value)}
         label="Operation label"
-        placeholder={operationGroups[currentOperationGroup].defaultLabel}
+        placeholder={currentOperationGroup?.emoji}
       />
 
       <Button variant="outlined" type="submit">

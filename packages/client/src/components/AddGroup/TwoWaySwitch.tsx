@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import styles from './IncomeSwitch.module.css'
+import styles from './TwoWaySwitch.module.css'
 
 type Props = {
   value: boolean

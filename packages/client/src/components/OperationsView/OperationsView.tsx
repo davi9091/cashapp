@@ -2,6 +2,7 @@ import { CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { BehaviorSubject } from 'rxjs'
 import { AddOperation, Fund, Operation } from '../../data/funds/types'
+import {IGroupsService} from '../../data/Groups/groups.service'
 import { OperationsService } from '../../data/operations/operations.service'
 import { AddOperationComponent } from '../AddOperation/AddOperation'
 import { OperationComponent } from '../Operation/Operation'
@@ -10,11 +11,13 @@ import styles from './OperationsView.module.css'
 
 type Props = {
   operationsService: OperationsService
+  groupsService: IGroupsService
   activeFund$: BehaviorSubject<Fund | null>
 }
 
 export const OperationsView: React.FC<Props> = ({
   operationsService,
+  groupsService,
   activeFund$,
 }) => {
   const [operations, setOperations] = useState<Operation[]>([])
@@ -39,6 +42,7 @@ export const OperationsView: React.FC<Props> = ({
   return activeFund ? (
     <div className={styles.container}>
       <AddOperationComponent
+        groupsService={groupsService}
         fund={activeFund}
         onSubmit={handleOperationSubmit}
       />

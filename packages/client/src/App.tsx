@@ -10,16 +10,19 @@ import appStyle from './App.module.css'
 import { NavBar } from './components/NavBar/NavBar'
 import { Landing } from './components/Landing/Landing'
 import { CircularProgress } from '@mui/material'
+import { IGroupsService } from './data/Groups/groups.service'
 
 type Props = {
   userService: IUserService
   fundsService: IFundsService
   operationsService: OperationsService
+  groupsService: IGroupsService
 }
 export const App: React.FC<Props> = ({
   userService,
   fundsService,
   operationsService,
+  groupsService,
 }) => {
   const [currentUser, setCurrentUser] = useState<
     User | null | typeof RESTORING_USER
@@ -49,12 +52,11 @@ export const App: React.FC<Props> = ({
             <div className={appStyle.AppContainer}>
               <OperationsView
                 operationsService={operationsService}
+                groupsService={groupsService}
                 activeFund$={fundsService.selectedFund$}
               />
 
-              <FundsView
-                fundsService={fundsService}
-              />
+              <FundsView fundsService={fundsService} />
             </div>
           )}
         </div>

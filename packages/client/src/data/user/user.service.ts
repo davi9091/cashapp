@@ -99,7 +99,7 @@ export class UserService implements IUserService {
   }
 }
 
-function userResponseToModel(resp: UserResponse): User {
+export function userResponseToModel(resp: UserResponse): User {
   return {
     username: resp.username,
     firstName: resp.firstName,

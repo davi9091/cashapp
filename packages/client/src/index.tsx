@@ -7,6 +7,7 @@ import { UserService } from './data/user/user.service'
 import { FundsService } from './data/funds/funds.service'
 import { userMock } from './data/user/mocks/mocks'
 import { OperationsService } from './data/operations/operations.service'
+import { GroupsService } from './data/Groups/groups.service'
 
 const startApp = async () => {
   const userService = new UserService()
@@ -15,6 +16,7 @@ const startApp = async () => {
     fundsService.selectedFund$,
     fundsService.updateCallback,
   )
+  const groupsService = new GroupsService(userService)
 
   ReactDOM.render(
     <React.StrictMode>
@@ -22,6 +24,7 @@ const startApp = async () => {
         userService={userService}
         fundsService={fundsService}
         operationsService={operationsService}
+        groupsService={groupsService}
       />
     </React.StrictMode>,
     document.getElementById('root'),
