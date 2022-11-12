@@ -9,7 +9,3 @@
 .form > *:not(:last-child){
   margin-right: 5px !important;
 }
-
-.emoji {
-  padding-right: 10px;
-}

@@ -2,8 +2,8 @@ import { Button, MenuItem, Select, TextField, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { getOperationGroups, OPERATION_GROUPS } from '../../data/funds/enums'
 import { AddOperation, Fund } from '../../data/funds/types'
-import { emojiMap } from '../../data/operations/emojiMapper'
 import { CurrencyInput } from '../CurrencyInput/CurrencyInput'
+import { GroupSelect } from '../GroupSelect/GroupSelect'
 
 import styles from './AddOperation.module.css'
 
@@ -61,20 +61,10 @@ export const AddOperationComponent: React.FC<AddOperationProps> = ({
         </Button>
       )}
 
-      <Select
-        value={operationGroups[currentOperationGroup]}
-        renderValue={(group) => emojiMap[group.type]}
-        onChange={(event) =>
-          setCurrentOperationGroup(event.target.value as OPERATION_GROUPS)
-        }
-      >
-        {Object.values(OPERATION_GROUPS).map((t) => (
-          <MenuItem key={t} value={t}>
-            <div className={styles.emoji}>{emojiMap[operationGroups[t].type]}</div>
-            <div>{operationGroups[t].name}</div>
-          </MenuItem>
-        ))}
-      </Select>
+      <GroupSelect
+        selectedGroup={currentOperationGroup}
+        onChange={setCurrentOperationGroup}
+      ></GroupSelect>
 
       <CurrencyInput
         currencySign={fund.currency.sign}

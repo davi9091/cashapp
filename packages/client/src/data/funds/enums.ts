@@ -5,6 +5,7 @@ export enum OPERATION_GROUPS {
   GROCERY = 'grocery',
   FUEL = 'fuel',
   SALARY = 'salary',
+  ADD_NEW = 'addNew',
 }
 
 export const getOperationGroups: () => Record<
@@ -30,5 +31,10 @@ export const getOperationGroups: () => Record<
     type: OPERATION_GROUPS.SALARY,
     name: 'Salary',
     defaultLabel: 'Salary',
+  },
+  [OPERATION_GROUPS.ADD_NEW]: {
+    type: OPERATION_GROUPS.ADD_NEW,
+    name: 'Add new',
+    defaultLabel: 'add new',
   },
 })

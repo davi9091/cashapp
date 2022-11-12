@@ -13,7 +13,7 @@ import session from 'express-session'
 import { initPassportUserStrategy } from './passport-strategies/user'
 import path from 'path'
 import dotenv from 'dotenv'
-import {opGroupRouter} from './routes/customOpGroups'
+import {opGroupRouter} from './routes/opGroups'
 
 const isDevEnv = process.env.DEV_ENV === 'true'
 const app = express()
