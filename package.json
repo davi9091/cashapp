@@ -1,0 +1,20 @@
+{
+  "name": "cashapp-bun",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "scripts": {
+    "start": "bun --watch run index.ts",
+    "lint": "bun run --filter '*' lint",
+    "lint:fix": "bun run --filter '*' lint:fix",
+    "format": "bun run --filter '*' format",
+    "format:check": "bun run --filter '*' format:check"
+  }
+}
