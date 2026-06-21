@@ -25,6 +25,13 @@ const server = serve({
       GET: proxy(`${API_BASE}/api/groups`),
       POST: proxy(`${API_BASE}/api/groups`),
     },
+    "/api/accounts": { GET: proxy(`${API_BASE}/api/accounts`) },
+    "/api/transactions": {
+      GET: proxy(`${API_BASE}/api/transactions`),
+      POST: proxy(`${API_BASE}/api/transactions`),
+    },
+    "/api/splits/outstanding": { GET: proxy(`${API_BASE}/api/splits/outstanding`) },
+    "/api/splits/settle": { POST: proxy(`${API_BASE}/api/splits/settle`) },
 
     "/*": index,
   },

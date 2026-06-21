@@ -2,6 +2,9 @@ import { serve } from 'bun'
 import { Effect, Layer, ManagedRuntime } from 'effect'
 import { register, login, whoami, logout } from './handlers/user'
 import { list as listGroups, create as createGroup } from './handlers/group'
+import { list as listAccounts } from './handlers/account'
+import { list as listTransactions, create as createTransaction } from './handlers/transaction'
+import { outstanding as outstandingSplits, settle as settleplit } from './handlers/split'
 import { toHttpResponse } from './lib/response'
 import { DatabaseService } from './services/Database'
 import { SessionService } from './services/Session'
@@ -34,6 +37,13 @@ serve({
       GET: makeHandler(listGroups),
       POST: makeHandler(createGroup),
     },
+    '/api/accounts': { GET: makeHandler(listAccounts) },
+    '/api/transactions': {
+      GET: makeHandler(listTransactions),
+      POST: makeHandler(createTransaction),
+    },
+    '/api/splits/outstanding': { GET: makeHandler(outstandingSplits) },
+    '/api/splits/settle': { POST: makeHandler(settleplit) },
   },
 })
 

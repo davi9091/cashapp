@@ -92,6 +92,21 @@ export const transferPairs = sqliteTable('transfer_pairs', {
     .references(() => transactions.id),
 })
 
+export const transactionSplits = sqliteTable('transaction_splits', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  transactionId: integer('transaction_id')
+    .notNull()
+    .references(() => transactions.id),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id),
+  amountCents: integer('amount_cents').notNull(),
+  settledAt: integer('settled_at', { mode: 'timestamp' }),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+})
+
 export const subscriptions = sqliteTable('subscriptions', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   groupId: integer('group_id')
