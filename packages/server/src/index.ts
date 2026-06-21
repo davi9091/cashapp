@@ -1,6 +1,7 @@
 import { serve } from 'bun'
 import { Effect, Layer, ManagedRuntime } from 'effect'
 import { register, login, whoami, logout } from './handlers/user'
+import { list as listGroups, create as createGroup } from './handlers/group'
 import { toHttpResponse } from './lib/response'
 import { DatabaseService } from './services/Database'
 import { SessionService } from './services/Session'
@@ -29,6 +30,10 @@ serve({
     '/api/auth/login': { POST: makeHandler(login) },
     '/api/auth/logout': { POST: makeHandler(logout) },
     '/api/auth/whoami': { GET: makeHandler(whoami) },
+    '/api/groups': {
+      GET: makeHandler(listGroups),
+      POST: makeHandler(createGroup),
+    },
   },
 })
 

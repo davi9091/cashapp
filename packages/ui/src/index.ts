@@ -21,6 +21,10 @@ const server = serve({
     "/api/auth/login": { POST: proxy(`${API_BASE}/api/auth/login`) },
     "/api/auth/logout": { POST: proxy(`${API_BASE}/api/auth/logout`) },
     "/api/auth/whoami": { GET: proxy(`${API_BASE}/api/auth/whoami`) },
+    "/api/groups": {
+      GET: proxy(`${API_BASE}/api/groups`),
+      POST: proxy(`${API_BASE}/api/groups`),
+    },
 
     "/*": index,
   },

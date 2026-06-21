@@ -34,6 +34,43 @@ const parseErrorBody = (res: Response): Effect.Effect<never, ApiFailure> =>
     ),
   )
 
+export type Group = {
+  id: number
+  name: string
+  role: "owner" | "member"
+  joinedAt: string
+}
+
+export const groups = {
+  list: (): Effect.Effect<Group[], ApiFailure> =>
+    request("/api/groups").pipe(
+      Effect.flatMap((res) =>
+        res.ok
+          ? Effect.tryPromise({
+              try: () => res.json() as Promise<Group[]>,
+              catch: (e) => new NetworkError({ cause: e }),
+            })
+          : parseErrorBody(res),
+      ),
+    ),
+
+  create: (name: string): Effect.Effect<{ groupId: number }, ApiFailure> =>
+    request("/api/groups", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    }).pipe(
+      Effect.flatMap((res) =>
+        res.ok
+          ? Effect.tryPromise({
+              try: () => res.json() as Promise<{ groupId: number }>,
+              catch: (e) => new NetworkError({ cause: e }),
+            })
+          : parseErrorBody(res),
+      ),
+    ),
+}
+
 export const auth = {
   login: (email: string, password: string): Effect.Effect<void, ApiFailure> =>
     request("/api/auth/login", {

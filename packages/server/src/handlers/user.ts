@@ -2,6 +2,7 @@ import { Effect, Schema } from 'effect'
 import * as UserDb from '../db/users'
 import * as GroupDb from '../db/groups'
 import * as GroupMemberDb from '../db/groupMembers'
+import * as AccountDb from '../db/accounts'
 import { DatabaseService } from '../services/Database'
 import { SessionService } from '../services/Session'
 import { HashService } from '../services/Hash'
@@ -27,16 +28,32 @@ export const register = (
     const hasher = yield* HashService
 
     const passwordHash = yield* hasher.hash(payload.password)
-    const user = yield* UserDb.createUser(payload.email, passwordHash, payload.firstName, payload.lastName)
+    const user = yield* UserDb.createUser(
+      payload.email,
+      passwordHash,
+      payload.firstName,
+      payload.lastName,
+    )
     const group = yield* GroupDb.createGroup(`${user.email} Personal`)
     const groupMember = yield* GroupMemberDb.addMember(
       group.id,
       user.id,
       'owner',
     )
+    const account = yield* AccountDb.createAccount(
+      'Default',
+      group.id,
+      'cash',
+      '€',
+    )
 
     return Response.json(
-      { userId: user.id, groupId: group.id, groupMemberId: groupMember.id },
+      {
+        userId: user.id,
+        groupId: group.id,
+        groupMemberId: groupMember.id,
+        accountId: account.id,
+      },
       { status: 201 },
     )
   })
