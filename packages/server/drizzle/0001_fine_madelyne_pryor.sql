@@ -78,3 +78,37 @@ CREATE TABLE `transfer_pairs` (
 	FOREIGN KEY (`from_transaction_id`) REFERENCES `transactions`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`to_transaction_id`) REFERENCES `transactions`(`id`) ON UPDATE no action ON DELETE no action
 );
+--> statement-breakpoint
+-- Seed default system categories (group_id IS NULL = available to all groups)
+INSERT INTO categories (name, icon, color, parent_id, group_id) VALUES
+  ('Food & Drink',  '🍔', '#F97316', NULL, NULL),
+  ('Transport',     '🚗', '#3B82F6', NULL, NULL),
+  ('Housing',       '🏠', '#8B5CF6', NULL, NULL),
+  ('Health',        '🏥', '#EF4444', NULL, NULL),
+  ('Entertainment', '🎬', '#EC4899', NULL, NULL),
+  ('Shopping',      '🛍️', '#F59E0B', NULL, NULL),
+  ('Income',        '💰', '#22C55E', NULL, NULL),
+  ('Savings',       '🏦', '#06B6D4', NULL, NULL),
+  ('Education',     '📚', '#6366F1', NULL, NULL),
+  ('Travel',        '✈️', '#14B8A6', NULL, NULL);
+INSERT INTO categories (name, icon, color, parent_id, group_id) VALUES
+  ('Groceries',      '🛒', '#F97316', 1, NULL),
+  ('Restaurants',    '🍽️', '#F97316', 1, NULL),
+  ('Coffee',         '☕',  '#F97316', 1, NULL),
+  ('Public Transit', '🚌', '#3B82F6', 2, NULL),
+  ('Fuel',           '⛽', '#3B82F6', 2, NULL),
+  ('Parking',        '🅿️', '#3B82F6', 2, NULL),
+  ('Rent',           '🔑', '#8B5CF6', 3, NULL),
+  ('Utilities',      '💡', '#8B5CF6', 3, NULL),
+  ('Internet',       '📡', '#8B5CF6', 3, NULL),
+  ('Medical',        '🩺', '#EF4444', 4, NULL),
+  ('Pharmacy',       '💊', '#EF4444', 4, NULL),
+  ('Gym',            '🏋️', '#EF4444', 4, NULL),
+  ('Streaming',      '📺', '#EC4899', 5, NULL),
+  ('Games',          '🎮', '#EC4899', 5, NULL),
+  ('Events',         '🎟️', '#EC4899', 5, NULL),
+  ('Clothing',       '👗', '#F59E0B', 6, NULL),
+  ('Electronics',    '📱', '#F59E0B', 6, NULL),
+  ('Salary',         '💼', '#22C55E', 7, NULL),
+  ('Freelance',      '🧑‍💻', '#22C55E', 7, NULL),
+  ('Investment',     '📈', '#22C55E', 7, NULL);

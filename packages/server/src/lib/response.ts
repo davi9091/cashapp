@@ -12,6 +12,10 @@ export const toHttpResponse = <R>(
         Effect.succeed(
           Response.json({ error: 'User already exists' }, { status: 409 }),
         ),
+      UserAlreadyMemberOfGroup: () =>
+        Effect.succeed(
+          Response.json({ error: 'User is already a member of this group' }, { status: 409 }),
+        ),
       InvalidCredentialsError: () =>
         Effect.succeed(
           Response.json({ error: 'Invalid credentials' }, { status: 401 }),

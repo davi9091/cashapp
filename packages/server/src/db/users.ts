@@ -24,8 +24,10 @@ export const findByEmail = (
 export const createUser = (
   email: string,
   passwordHash: string,
+  firstName?: string,
+  lastName?: string,
 ): Effect.Effect<
-  { id: number },
+  { id: number; email: string },
   Errors.UserAlreadyExistsError,
   DatabaseService
 > =>
@@ -35,8 +37,8 @@ export const createUser = (
       try: () =>
         db
           .insert(users)
-          .values({ email, passwordHash })
-          .returning({ id: users.id })
+          .values({ email, passwordHash, firstName, lastName })
+          .returning({ id: users.id, email: users.email })
           .all(),
       catch: () => new Errors.UserAlreadyExistsError(),
     })

@@ -1,18 +1,16 @@
 import { Effect, Schema } from 'effect'
 import * as UserDb from '../db/users'
+import * as GroupDb from '../db/groups'
+import * as GroupMemberDb from '../db/groupMembers'
 import { DatabaseService } from '../services/Database'
 import { SessionService } from '../services/Session'
 import { HashService } from '../services/Hash'
 import * as Errors from '../lib/errors'
-import { RegisterSchema, LoginSchema } from './schemas'
+import { RegisterSchema, LoginSchema } from './userSchemas'
+import { parseJsonBody } from '../utils/parse'
+import { requireAuth } from '../utils/auth'
 
 type AppServices = DatabaseService | SessionService | HashService
-
-const parseJsonBody = (req: Request) =>
-  Effect.tryPromise({
-    try: () => req.json(),
-    catch: () => new Errors.ValidationError({ message: 'Invalid JSON body' }),
-  })
 
 export const register = (
   req: Request,
@@ -29,9 +27,18 @@ export const register = (
     const hasher = yield* HashService
 
     const passwordHash = yield* hasher.hash(payload.password)
-    const user = yield* UserDb.createUser(payload.email, passwordHash)
+    const user = yield* UserDb.createUser(payload.email, passwordHash, payload.firstName, payload.lastName)
+    const group = yield* GroupDb.createGroup(`${user.email} Personal`)
+    const groupMember = yield* GroupMemberDb.addMember(
+      group.id,
+      user.id,
+      'owner',
+    )
 
-    return Response.json({ userId: user.id }, { status: 201 })
+    return Response.json(
+      { userId: user.id, groupId: group.id, groupMemberId: groupMember.id },
+      { status: 201 },
+    )
   })
 
 export const login = (
@@ -78,28 +85,7 @@ export const whoami = (
   req: Request,
 ): Effect.Effect<Response, Errors.AppError, AppServices> =>
   Effect.gen(function* () {
-    const session = yield* SessionService
-
-    const sessionId = yield* session
-      .parseFromCookie(req.headers.get('Cookie'))
-      .pipe(
-        Effect.flatMap((id) =>
-          id !== undefined
-            ? Effect.succeed(id)
-            : Effect.fail(new Errors.UnauthorizedError()),
-        ),
-      )
-
-    const userId = yield* session
-      .get(sessionId)
-      .pipe(
-        Effect.flatMap((id) =>
-          id !== undefined
-            ? Effect.succeed(id)
-            : Effect.fail(new Errors.UnauthorizedError()),
-        ),
-      )
-
+    const userId = yield* requireAuth(req)
     return Response.json({ userId })
   })
 

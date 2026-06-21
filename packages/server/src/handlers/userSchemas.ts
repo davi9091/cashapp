@@ -7,6 +7,8 @@ export const RegisterSchema = Schema.Struct({
     }),
   ),
   password: Schema.String.pipe(Schema.minLength(8)),
+  firstName: Schema.optional(Schema.String.pipe(Schema.minLength(1))),
+  lastName: Schema.optional(Schema.String.pipe(Schema.minLength(1))),
 })
 
 export const LoginSchema = Schema.Struct({

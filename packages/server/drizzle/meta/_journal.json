@@ -15,12 +15,12 @@
       "when": 1781738086276,
       "tag": "0001_fine_madelyne_pryor",
       "breakpoints": true
-    }
-    ,{
+    },
+    {
       "idx": 2,
       "version": "6",
-      "when": 1781738200000,
-      "tag": "0002_seed_categories",
+      "when": 1782078600398,
+      "tag": "0002_certain_drax",
       "breakpoints": true
     }
   ]

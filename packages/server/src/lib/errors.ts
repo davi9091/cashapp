@@ -3,6 +3,9 @@ import { Data } from 'effect'
 export class UserAlreadyExistsError extends Data.TaggedError(
   'UserAlreadyExistsError',
 )<{}> {}
+export class UserAlreadyMemberOfGroup extends Data.TaggedError(
+  'UserAlreadyMemberOfGroup'
+)<{}> {}
 export class InvalidCredentialsError extends Data.TaggedError(
   'InvalidCredentialsError',
 )<{}> {}
@@ -18,6 +21,7 @@ export class InternalServerError extends Data.TaggedError(
 
 export type AppError =
   | UserAlreadyExistsError
+  | UserAlreadyMemberOfGroup
   | InvalidCredentialsError
   | UnauthorizedError
   | ValidationError
