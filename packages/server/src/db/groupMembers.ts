@@ -1,6 +1,6 @@
 import { Effect } from "effect"
 import { and, eq } from "drizzle-orm"
-import { groupMembers } from "./schema"
+import { groupMembers, users } from "./schema"
 import * as Errors from '../lib/errors'
 import { DatabaseService } from "../services/Database"
 
@@ -30,6 +30,37 @@ export const addMember = (
     return rows[0] !== undefined
       ? rows[0]
       : yield* Effect.die(new Error('Insert returned no rows'))
+  })
+
+export type GroupMemberWithUser = {
+  userId: number
+  role: 'owner' | 'member'
+  email: string
+  firstName: string | null
+  lastName: string | null
+}
+
+export const listByGroupWithUsers = (
+  groupId: number,
+): Effect.Effect<GroupMemberWithUser[], Errors.InternalServerError, DatabaseService> =>
+  Effect.gen(function* () {
+    const { db } = yield* DatabaseService
+    return yield* Effect.try({
+      try: () =>
+        db
+          .select({
+            userId: groupMembers.userId,
+            role: groupMembers.role,
+            email: users.email,
+            firstName: users.firstName,
+            lastName: users.lastName,
+          })
+          .from(groupMembers)
+          .innerJoin(users, eq(groupMembers.userId, users.id))
+          .where(eq(groupMembers.groupId, groupId))
+          .all() as GroupMemberWithUser[],
+      catch: (e) => new Errors.InternalServerError({ cause: e }),
+    })
   })
 
 export const findMembership = (

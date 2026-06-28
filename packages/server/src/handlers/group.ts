@@ -11,6 +11,27 @@ import { requireAuth } from '../utils/auth'
 
 type AppServices = DatabaseService | SessionService
 
+export const listMembers = (
+  req: Request,
+): Effect.Effect<Response, Errors.AppError, AppServices> =>
+  Effect.gen(function* () {
+    const userId = yield* requireAuth(req)
+
+    const groupId = Number(new URL(req.url).searchParams.get('groupId'))
+    if (!Number.isInteger(groupId) || groupId <= 0) {
+      return yield* Effect.fail(new Errors.ValidationError({ message: 'Missing or invalid groupId' }))
+    }
+
+    yield* GroupMemberDb.findMembership(groupId, userId).pipe(
+      Effect.flatMap((m) =>
+        m !== undefined ? Effect.void : Effect.fail(new Errors.UnauthorizedError()),
+      ),
+    )
+
+    const members = yield* GroupMemberDb.listByGroupWithUsers(groupId)
+    return Response.json(members)
+  })
+
 export const list = (
   req: Request,
 ): Effect.Effect<Response, Errors.AppError, AppServices> =>
